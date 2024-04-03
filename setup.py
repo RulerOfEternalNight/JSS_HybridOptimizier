@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 VERSION = '0.0.1'
 DESCRIPTION = 'AI based optimized parameter estimation for ML models.'
@@ -8,21 +8,20 @@ LONG_DESCRIPTION = 'AI based optimized parameter estimation of ML models using H
 setup(
     name='ml_optimizer',
     version=VERSION,
-    packages=['jss_optimizer'],
-    install_requires=['numpy', 'scikit-learn', 'tqdm'],
+    install_requires=['numpy', 'tqdm'],
     author='Jegadit S Saravanan',
     author_email='jegaditssaravanan@yahoo.com',
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=LONG_DESCRIPTION,
-    keywords='machine-learning optimization genetic-algorithm simulated-annealing',
-    # url='https://github.com/your_username/ml_optimizer',
+    packages=find_packages(),
+    keywords=['machine-learning', 'parameter optimization', 'genetic algorithm', 'simulated annealing'],
     classifiers=[
+        "Development Status :: 1 - Planning",
         'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Development Status :: 3 - Alpha',
-        'Intended Audience :: Science/Research',
+        'Intended Audience :: Science/Research/Developers',
         'Topic :: Scientific/Engineering :: Artificial Intelligence',
     ],
 )

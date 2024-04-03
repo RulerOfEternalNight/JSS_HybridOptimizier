@@ -1,1 +1,1 @@
-from jss_optimizer import optimize, simulate_annealing
+from .jss_optimizer import HyperparameterOptimizer

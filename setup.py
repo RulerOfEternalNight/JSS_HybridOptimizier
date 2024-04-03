@@ -6,7 +6,7 @@ LONG_DESCRIPTION = 'AI based optimized parameter estimation of ML models using H
 
 
 setup(
-    name='ml_optimizer',
+    name='jss_optimizer',
     version=VERSION,
     install_requires=['numpy', 'tqdm'],
     author='Jegadit S Saravanan',

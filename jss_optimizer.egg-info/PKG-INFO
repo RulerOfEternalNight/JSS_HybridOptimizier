@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: jss-optimizer
+Version: 0.0.1
+Summary: AI based optimized parameter estimation for ML models.
+Author: Jegadit S Saravanan
+Author-email: jegaditssaravanan@yahoo.com
+Keywords: machine-learning,parameter optimization,genetic algorithm,simulated annealing
+Classifier: Development Status :: 1 - Planning
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research/Developers
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Description-Content-Type: text/markdown
+
+AI based optimized parameter estimation of ML models using Hybrid of Genetic Algorithm and Simulated Annealing. based on the paper by Jegadit S Saravanan @ https://ieeexplore.ieee.org/document/10308077

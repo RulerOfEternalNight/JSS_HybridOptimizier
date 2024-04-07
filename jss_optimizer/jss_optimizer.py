@@ -9,13 +9,13 @@ class HyperparameterOptimizer:
         self.model = model
         self.params = params
 
-    def cal_pop_fitness(self, pop, X_train, y_train):
+    def cal_pop_fitness(self, pop, X_train, y_train, X_test, y_test):
         fitness = []
         for i in range(len(pop)):
             if pop[i][1] >= 1:
                 classifier = self.model(random_state=42, **{self.params[j]: pop[i][j] for j in range(len(pop[i]))}, oob_score=True)
                 classifier.fit(X_train, y_train)
-                fitness.append(classifier.oob_score_)
+                fitness.append(classifier.score(X_train, y_train))
             else:
                 fitness.append(0)
         return fitness
@@ -50,7 +50,7 @@ class HyperparameterOptimizer:
                 gene_idx = gene_idx + mutations_counter
         return offspring_crossover
 
-    def optimize(self, X_train, y_train, sol_per_pop=5, num_parents_mating=3, num_generations=100):
+    def optimize(self, X_train, y_train, X_test, y_test, sol_per_pop=5, num_parents_mating=3, num_generations=100):
         pop_size = (sol_per_pop, len(self.params))
         new_population = np.random.randint(low=1, high=(20 - 4), size=pop_size)
 
@@ -58,7 +58,7 @@ class HyperparameterOptimizer:
         best_fitness = float('-inf')
         print("\n")
         for generation in tqdm(range(num_generations)):
-            fitness = self.cal_pop_fitness(new_population, X_train, y_train)
+            fitness = self.cal_pop_fitness(new_population, X_train, y_train, X_test, y_test)
             best_fitness_in_gen = max(fitness)
             if best_fitness_in_gen > best_fitness:
                 best_fitness = best_fitness_in_gen
@@ -71,22 +71,22 @@ class HyperparameterOptimizer:
             new_population[parents.shape[0]:, :] = offspring_mutation
         print("\nFinished applying genetic algorithm.")
         print("Score of the best candidates after parameter optimizing with genetic algorithm: ", best_fitness)
-        print("Appplying Simulated Annealing to optimize by escaping local optimas ... \n")
         return best_solution
 
-    def objective_function(self, combination, X_train, y_train):
+    def objective_function(self, combination, X_train, y_train, X_test, y_test):
         classifier = self.model(random_state=42, **{self.params[j]: combination[j] for j in range(len(combination))}, oob_score=True)
         classifier.fit(X_train, y_train)
-        return classifier.oob_score_
+        return classifier.score(X_test, y_test)
 
-    def simulate_annealing(self, start_solution, X_train, y_train, T=10, T_min=0.001, alpha=0.99):
+    def simulate_annealing(self, start_solution, X_train, y_train, X_test, y_test, T=10, T_min=0.001, alpha=0.99):
+        print("Appplying Simulated Annealing to optimize by escaping local optimas ... \n")
         combination = start_solution.copy()
         with tqdm(total=int((T-T_min)/alpha)) as pbar:
             while T > T_min:
                 new_combination = combination.copy()
                 i = random.randint(0, len(combination) - 1)
                 new_combination[i] = random.randint(1, 20)
-                delta_E = self.objective_function(new_combination, X_train, y_train) - self.objective_function(combination, X_train, y_train)
+                delta_E = self.objective_function(new_combination, X_train, y_train, X_test, y_test) - self.objective_function(combination, X_train, y_train, X_test, y_test)
                 if delta_E > 0:
                     combination = new_combination
                 else:
@@ -95,7 +95,7 @@ class HyperparameterOptimizer:
                         combination = new_combination
                 T *= alpha
                 pbar.update(1)
-        print("\nScore of the best candidates after parameter optimizing with GA-SA algorithm:  ", self.objective_function(combination, X_train, y_train))
+        print("\nScore of the best candidates after parameter optimizing with GA-SA algorithm:  ", self.objective_function(combination, X_train, y_train, X_test, y_test))
         return combination
 
 
